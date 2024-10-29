@@ -9,7 +9,7 @@ class JokesHolder(private val binding: JokeItemBinding) : RecyclerView.ViewHolde
         binding.imageView.setOnClickListener {
             if (binding.answer.text == joke.answer)
                 binding.answer.text = ""
-            else{
+            else {
                 binding.answer.text = joke.answer
             }
         }
