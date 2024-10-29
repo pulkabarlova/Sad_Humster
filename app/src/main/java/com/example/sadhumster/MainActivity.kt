@@ -1,23 +1,31 @@
 package com.example.sadhumster
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.media.MediaPlayer
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sadhumster.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val adapter = JokesAdapter()
+    private val adapter by lazy { JokesAdapter(this) }
+    private val jokesData = JokesData()
+    private val jokesList = jokesData.returnList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.recycleView.layoutManager = LinearLayoutManager(this)
-        binding.recycleView.adapter = adapter
+        setUpRecycler()
+    }
+
+    private fun setUpRecycler() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = adapter
+        adapter.setData(jokesList)
     }
 }
