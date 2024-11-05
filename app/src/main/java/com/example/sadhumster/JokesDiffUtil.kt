@@ -3,9 +3,11 @@ package com.example.sadhumster
 import androidx.recyclerview.widget.DiffUtil
 
 class JokesDiffUtil(
+
     private val oldList: List<Joke>,
     private val newList: List<Joke>
 ) : DiffUtil.Callback() {
+
     override fun getOldListSize(): Int {
         return oldList.size
     }

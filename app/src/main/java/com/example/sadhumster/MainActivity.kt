@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sadhumster.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
     private val adapter by lazy { JokesAdapter(this) }
-    private val jokesData = JokesData()
-    private val jokesList = jokesData.returnList()
+    private val jokesData by lazy {JokesData}
+    private val jokesList = jokesData.getJokesList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -10,16 +10,21 @@ import com.example.sadhumster.databinding.ActivityJokeDetailsBinding
 import com.example.sadhumster.databinding.JokeItemBinding
 
 class JokeDetails : AppCompatActivity() {
-    private val jokesData = JokesData()
+
+    private val jokesData by lazy {JokesData}
     private lateinit var binding: ActivityJokeDetailsBinding
-    private var jokesList = jokesData.returnList()
+    private var jokesList = jokesData.getJokesList()
+    private val jokeIndex = "jokeIndex"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityJokeDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         super.onCreate(savedInstanceState)
-        binding.hamster.setImageResource(R.drawable.hamster)
-        binding.header.text = jokesList[intent.getIntExtra("jokeIndex", 0)].category
-        binding.question.text = jokesList[intent.getIntExtra("jokeIndex", 0)].question
-        binding.answer.text = jokesList[intent.getIntExtra("jokeIndex", 0)].answer
+        with(binding) {
+            hamster.setImageResource(R.drawable.hamster)
+            header.text = jokesList[intent.getIntExtra(jokeIndex, 0)].category
+            question.text = jokesList[intent.getIntExtra(jokeIndex, 0)].question
+            answer.text = jokesList[intent.getIntExtra(jokeIndex, 0)].answer
+        }
     }
 }

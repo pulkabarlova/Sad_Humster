@@ -1,7 +1,7 @@
 package com.example.sadhumster
 
-class JokesData() {
-    fun returnList(): List<Joke> {
+object JokesData {
+    fun getJokesList(): List<Joke> {
         val jokesList = listOf(
             Joke("Joke #1", "What has a face and two hands but no arms or legs?", "a clock"),
             Joke("Joke #2", "What does a house wear?", "ad-dress."),

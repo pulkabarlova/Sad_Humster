@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Sad Humster</string>
+    <string name="question">Question</string>
+    <string name="answer">answer</string>
+    <string name="joke">Joke</string>
 </resources>
