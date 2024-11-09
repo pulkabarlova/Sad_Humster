@@ -1,15 +1,19 @@
 package com.example.sadhumster
 
-import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sadhumster.databinding.JokeItemBinding
 
-class JokesAdapter(private val context: Context) : RecyclerView.Adapter<JokesHolder>() {
+class JokesAdapter(
+    private val context: MainFragment,
+    private val fragmentManager: FragmentManager
+) : RecyclerView.Adapter<JokesHolder>() {
 
     private var jokes = emptyList<Joke>()
 
@@ -33,9 +37,14 @@ class JokesAdapter(private val context: Context) : RecyclerView.Adapter<JokesHol
     override fun onBindViewHolder(holder: JokesHolder, position: Int) {
         holder.bind(jokes[position])
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, JokeDetails::class.java)
-            intent.putExtra("jokeIndex", position)
-            context.startActivity(intent)
+            val fragment = FragmentJokesDetails()
+            fragment.arguments = Bundle().apply {
+                putInt("jokeIndex", position)
+            }
+            fragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.container, fragment)
+                .commit()
         }
     }
 }
