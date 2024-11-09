@@ -42,8 +42,9 @@ class JokesAdapter(
                 putInt("jokeIndex", position)
             }
             fragmentManager.beginTransaction()
+                .hide(fragmentManager.fragments[0])
                 .addToBackStack(null)
-                .replace(R.id.container, fragment)
+                .add(R.id.container, fragment)
                 .commit()
         }
     }
