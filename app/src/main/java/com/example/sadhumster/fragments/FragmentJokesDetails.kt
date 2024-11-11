@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.sadhumster.joke.JokesData
+import com.example.sadhumster.model.JokesData
 import com.example.sadhumster.R
 import com.example.sadhumster.databinding.FragmentJokesDetailsBinding
 

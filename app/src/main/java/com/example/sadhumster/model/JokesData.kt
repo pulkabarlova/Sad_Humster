@@ -1,4 +1,4 @@
-package com.example.sadhumster.joke
+package com.example.sadhumster.model
 
 object JokesData {
     fun getJokesList(): List<Joke> {

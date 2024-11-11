@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sadhumster.joke.Joke
+import com.example.sadhumster.model.Joke
 import com.example.sadhumster.R
 import com.example.sadhumster.databinding.JokeItemBinding
 import com.example.sadhumster.fragments.FragmentJokesDetails
