@@ -1,8 +1,9 @@
-package com.example.sadhumster
+package com.example.sadhumster.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sadhumster.databinding.ActivityMainBinding
+import com.example.sadhumster.fragments.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

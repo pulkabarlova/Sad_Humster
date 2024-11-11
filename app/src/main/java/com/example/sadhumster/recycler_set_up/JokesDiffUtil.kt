@@ -1,6 +1,7 @@
-package com.example.sadhumster
+package com.example.sadhumster.recycler_set_up
 
 import androidx.recyclerview.widget.DiffUtil
+import com.example.sadhumster.joke.Joke
 
 class JokesDiffUtil(
 

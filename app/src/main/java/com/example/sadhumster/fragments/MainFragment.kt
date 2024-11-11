@@ -1,12 +1,14 @@
-package com.example.sadhumster
+package com.example.sadhumster.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sadhumster.recycler_set_up.JokesAdapter
+import com.example.sadhumster.joke.JokesData
+import com.example.sadhumster.R
 import com.example.sadhumster.databinding.MainFragmentBinding
 
 class MainFragment : Fragment(R.layout.main_fragment) {
@@ -15,7 +17,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private val binding get() = _binding!!
     private val adapter by lazy { JokesAdapter(this, parentFragmentManager) }
     private val jokesData by lazy { JokesData }
-    private val jokesList = jokesData.getJokesList()
+    private val jokesList = JokesData.getJokesList()
 
     override fun onCreateView(
         inflater: LayoutInflater,

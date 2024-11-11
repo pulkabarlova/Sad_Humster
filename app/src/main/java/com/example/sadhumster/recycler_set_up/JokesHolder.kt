@@ -1,6 +1,7 @@
-package com.example.sadhumster
+package com.example.sadhumster.recycler_set_up
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sadhumster.joke.Joke
 import com.example.sadhumster.databinding.JokeItemBinding
 
 class JokesHolder(private val binding: JokeItemBinding) : RecyclerView.ViewHolder(binding.root) {

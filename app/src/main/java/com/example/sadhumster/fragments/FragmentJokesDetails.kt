@@ -1,20 +1,21 @@
-package com.example.sadhumster
+package com.example.sadhumster.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.sadhumster.joke.JokesData
+import com.example.sadhumster.R
 import com.example.sadhumster.databinding.FragmentJokesDetailsBinding
-import com.example.sadhumster.databinding.MainFragmentBinding
 
 
 class FragmentJokesDetails : Fragment(R.layout.fragment_jokes_details) {
 
     private var _binding: FragmentJokesDetailsBinding? = null
     private val binding get() = _binding!!
-    private val jokesData by lazy {JokesData}
-    private var jokesList = jokesData.getJokesList()
+    private val jokesData by lazy { JokesData }
+    private var jokesList = JokesData.getJokesList()
     private val jokeIndex = "jokeIndex"
 
     override fun onCreate(savedInstanceState: Bundle?) {

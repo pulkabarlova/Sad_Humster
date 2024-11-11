@@ -1,14 +1,16 @@
-package com.example.sadhumster
+package com.example.sadhumster.recycler_set_up
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sadhumster.joke.Joke
+import com.example.sadhumster.R
 import com.example.sadhumster.databinding.JokeItemBinding
+import com.example.sadhumster.fragments.FragmentJokesDetails
+import com.example.sadhumster.fragments.MainFragment
 
 class JokesAdapter(
     private val context: MainFragment,

@@ -1,4 +1,4 @@
-package com.example.sadhumster
+package com.example.sadhumster.joke
 
 data class Joke(
     val category: String,
