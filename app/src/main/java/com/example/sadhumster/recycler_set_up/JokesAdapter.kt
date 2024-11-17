@@ -17,7 +17,7 @@ class JokesAdapter(
     private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<JokesHolder>() {
 
-    private var jokes = emptyList<Joke>()
+    private var jokes = mutableListOf<Joke>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokesHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -29,10 +29,12 @@ class JokesAdapter(
         return jokes.size
     }
 
-    fun setData(newList: List<Joke>) {
+    fun setData(newList: MutableList<Joke>) {
         val diffCallback = JokesDiffUtil(jokes, newList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        jokes = newList
+        notifyItemRangeInserted(jokes.size, newList.size)
+        jokes.clear()
+        jokes.addAll(newList)
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -40,13 +42,16 @@ class JokesAdapter(
         holder.bind(jokes[position])
         holder.itemView.setOnClickListener {
             val fragment = FragmentJokesDetails()
-            fragment.arguments = Bundle().apply {
-                putInt("jokeIndex", position)
-            }
+            fragmentManager.setFragmentResult(
+                "jokeDetails",
+                Bundle().apply {
+                    putParcelableArrayList("jokesList", ArrayList(jokes))
+                    putInt("jokeIndex", position)
+                }
+            )
             fragmentManager.beginTransaction()
-                .hide(fragmentManager.fragments[0])
                 .addToBackStack(null)
-                .add(R.id.container, fragment)
+                .replace(R.id.container, fragment)
                 .commit()
         }
     }
