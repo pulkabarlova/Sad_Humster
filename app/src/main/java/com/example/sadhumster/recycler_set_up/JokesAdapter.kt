@@ -39,7 +39,7 @@ class JokesAdapter(
     }
 
     override fun onBindViewHolder(holder: JokesHolder, position: Int) {
-        holder.bind(jokes[position])
+        holder.bind(jokes[position], context)
         holder.itemView.setOnClickListener {
             val fragment = FragmentJokesDetails()
             fragmentManager.setFragmentResult(

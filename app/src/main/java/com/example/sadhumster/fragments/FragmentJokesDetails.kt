@@ -37,7 +37,8 @@ class FragmentJokesDetails : Fragment(R.layout.fragment_jokes_details) {
             jokesList?.get(jokeIndex)?.let { joke ->
                 with(binding) {
                     hamster.setImageResource(R.drawable.hamster)
-                    header.text = "#" + "" + (jokeIndex + 1).toString() + " " + joke.category
+                    val s = context?.getString(R.string.joke_title, (jokeIndex + 1), joke.category)
+                    header.text = s
                     question.text = joke.question
                     answer.text = joke.answer
                 }

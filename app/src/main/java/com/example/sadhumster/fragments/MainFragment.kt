@@ -47,7 +47,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             isFirst = savedInstanceState.getBoolean("isFirst")
         }
         setUpRecycler()
-        getData()
+        viewLifecycleOwner.lifecycleScope.launch { getData() }
     }
 
     private fun setUpRecycler() {
@@ -78,24 +78,22 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         }
     }
 
-    private fun getData() {
+    private suspend fun getData() {
         if (!isFirst) {
             binding.progressBar.visibility = View.VISIBLE
             binding.enter.visibility = View.INVISIBLE
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            delay(2000)
-            parentFragmentManager.setFragmentResultListener(
-                "joke",
-                viewLifecycleOwner
-            ) { _, bundle ->
-                val joke = bundle.getParcelable<Joke>("joke")
-                joke?.let {
-                    jokesList.add(it)
-                }
+        delay(2000)
+        parentFragmentManager.setFragmentResultListener(
+            "joke",
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val joke = bundle.getParcelable<Joke>("joke")
+            joke?.let {
+                jokesList.add(it)
             }
-            binding.progressBar.visibility = View.INVISIBLE
-            setUpRecycler()
         }
+        binding.progressBar.visibility = View.INVISIBLE
+        setUpRecycler()
     }
 }
