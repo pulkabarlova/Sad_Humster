@@ -15,6 +15,7 @@ import com.example.sadhumster.activities.MainActivity
 import com.example.sadhumster.databinding.FragmentJokeAddBinding
 import com.example.sadhumster.databinding.FragmentJokesDetailsBinding
 import com.example.sadhumster.model.Joke
+import com.example.sadhumster.model.JokeRepository
 import com.example.sadhumster.model.JokesData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,11 +23,6 @@ import kotlinx.coroutines.launch
 class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
     private var _binding: FragmentJokeAddBinding? = null
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,9 +43,7 @@ class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
         val answer = binding.answer.text.toString()
         val category = binding.name.text.toString()
         val listItem = Joke(question, answer, category)
-        parentFragmentManager.setFragmentResult("joke", Bundle().apply {
-            putParcelable("joke", listItem)
-        })
+        JokeRepository.addJoke(listItem)
         parentFragmentManager.popBackStack()
     }
 

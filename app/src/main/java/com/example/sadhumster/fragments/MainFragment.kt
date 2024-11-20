@@ -14,7 +14,10 @@ import com.example.sadhumster.R
 import com.example.sadhumster.activities.MainActivity
 import com.example.sadhumster.databinding.MainFragmentBinding
 import com.example.sadhumster.model.Joke
+import com.example.sadhumster.model.JokeRepository
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 class MainFragment : Fragment(R.layout.main_fragment) {
@@ -22,8 +25,8 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter by lazy { JokesAdapter(this, parentFragmentManager) }
-    private val jokesData by lazy { JokesData }
-    private val jokesList = jokesData.getJokesList()
+    private val jokeRepository = JokeRepository
+    private val jokesList = mutableListOf<Joke>()
     private var isFirst = true
 
     override fun onCreateView(
@@ -47,7 +50,17 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             isFirst = savedInstanceState.getBoolean("isFirst")
         }
         setUpRecycler()
-        viewLifecycleOwner.lifecycleScope.launch { getData() }
+        viewLifecycleOwner.lifecycleScope.launch {
+            if(!isFirst){
+                binding.progressBar.visibility = View.VISIBLE
+                binding.enter.visibility = View.INVISIBLE
+            }
+            jokeRepository.getData().collect{
+                jokesList.addAll(it)
+                adapter.setData(jokesList)
+                binding.progressBar.visibility = View.INVISIBLE
+            }
+        }
     }
 
     private fun setUpRecycler() {
@@ -76,24 +89,5 @@ class MainFragment : Fragment(R.layout.main_fragment) {
                 .replace(R.id.container, FragmentJokeAdd())
                 .commit()
         }
-    }
-
-    private suspend fun getData() {
-        if (!isFirst) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.enter.visibility = View.INVISIBLE
-        }
-        delay(2000)
-        parentFragmentManager.setFragmentResultListener(
-            "joke",
-            viewLifecycleOwner
-        ) { _, bundle ->
-            val joke = bundle.getParcelable<Joke>("joke")
-            joke?.let {
-                jokesList.add(it)
-            }
-        }
-        binding.progressBar.visibility = View.INVISIBLE
-        setUpRecycler()
     }
 }

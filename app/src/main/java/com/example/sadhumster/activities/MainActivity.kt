@@ -9,6 +9,7 @@ import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.example.sadhumster.databinding.ActivityMainBinding
 import com.example.sadhumster.fragments.FragmentJokeAdd
 import com.example.sadhumster.fragments.MainFragment
+import com.example.sadhumster.model.Joke
 
 class MainActivity : AppCompatActivity() {
 
