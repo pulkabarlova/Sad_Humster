@@ -3,10 +3,16 @@ package com.example.sadhumster.model
 import android.os.Parcel
 import android.os.Parcelable
 
+data class JokeResponse(
+    val error: Boolean,
+    val amount: Int,
+    val jokes: List<Joke>
+)
+
 data class Joke(
     val category: String,
-    val question: String,
-    val answer: String
+    val setup: String,
+    val delivery: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -16,8 +22,8 @@ data class Joke(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(category)
-        parcel.writeString(question)
-        parcel.writeString(answer)
+        parcel.writeString(setup)
+        parcel.writeString(delivery)
     }
 
     override fun describeContents(): Int = 0

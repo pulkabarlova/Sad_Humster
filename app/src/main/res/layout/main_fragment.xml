@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:backgroundTint="#806491"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.954"
@@ -20,17 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.918"
         app:srcCompat="@android:drawable/ic_input_add" />
-
-    <TextView
-        android:id="@+id/enter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/enter"
-        android:textSize="26dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -40,7 +30,8 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="8dp">
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        >
     </androidx.recyclerview.widget.RecyclerView>
 
     <ProgressBar

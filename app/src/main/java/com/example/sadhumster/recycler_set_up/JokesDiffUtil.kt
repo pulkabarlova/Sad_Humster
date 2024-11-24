@@ -19,7 +19,7 @@ class JokesDiffUtil(
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition].category == newList[newItemPosition].category &&
-                oldList[oldItemPosition].question == newList[newItemPosition].question
+                oldList[oldItemPosition].setup == newList[newItemPosition].setup
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

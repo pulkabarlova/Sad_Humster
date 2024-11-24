@@ -11,6 +11,6 @@ class JokesHolder(private val binding: JokeItemBinding) : RecyclerView.ViewHolde
     fun bind(joke: Joke, context: MainFragment) {
         val s = context.getString(R.string.joke_title, (position + 1), joke.category)
         binding.header.text = s
-        binding.question.text = joke.question
+        binding.question.text = joke.setup
     }
 }

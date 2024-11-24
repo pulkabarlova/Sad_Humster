@@ -34,7 +34,7 @@ class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.floatingActionButtonFragment.setOnClickListener {
-            addJoke()
+                addJoke()
         }
 
     }
