@@ -38,12 +38,13 @@ class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
         }
 
     }
+
     private fun addJoke() {
         val question = binding.question.text.toString()
         val answer = binding.answer.text.toString()
         val category = binding.name.text.toString()
         val listItem = Joke(question, answer, category)
-        JokeRepository.addJoke(listItem)
+        viewLifecycleOwner.lifecycleScope.launch { JokeRepository.addJoke(listItem) }
         parentFragmentManager.popBackStack()
     }
 
