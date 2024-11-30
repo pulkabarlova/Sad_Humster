@@ -32,7 +32,6 @@ class JokesAdapter(
     fun setData(newList: MutableList<Joke>) {
         val diffCallback = JokesDiffUtil(jokes, newList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        notifyItemRangeInserted(jokes.size, newList.size)
         jokes.clear()
         jokes.addAll(newList)
         diffResult.dispatchUpdatesTo(this)

@@ -12,9 +12,11 @@ data class JokeResponse(
 data class Joke(
     val category: String,
     val setup: String,
-    val delivery: String
+    val delivery: String,
+    val from: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: ""

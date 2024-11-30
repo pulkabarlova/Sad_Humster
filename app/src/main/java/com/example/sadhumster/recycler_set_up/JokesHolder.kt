@@ -9,8 +9,13 @@ import com.example.sadhumster.fragments.MainFragment
 class JokesHolder(private val binding: JokeItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(joke: Joke, context: MainFragment) {
-        val s = context.getString(R.string.joke_title, (position + 1), joke.category)
+        var from = "(internet)"
+        if (joke.from == "fromFragment"){
+            from = "(your)"
+        }
+        val s = context.getString(R.string.joke_title, (position + 1), joke.category, from)
         binding.header.text = s
         binding.question.text = joke.setup
+
     }
 }

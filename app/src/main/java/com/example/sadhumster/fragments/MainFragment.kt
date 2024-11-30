@@ -29,9 +29,12 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private val binding get() = _binding!!
     private val adapter by lazy { JokesAdapter(this, parentFragmentManager) }
     private val jokeRepository = JokeRepository
-    private val jokesList = mutableSetOf<Joke>()
+    private val jokesListLoaded = mutableSetOf<Joke>()
+    private val jokesLisFromFragment = mutableSetOf<Joke>()
     private var isFirst = true
     private var isLoading = false
+    private val fromInternet = "fromInternet"
+    private val fromFragment = "fromFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,29 +52,32 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             onAddClick()
         }
         if (savedInstanceState != null) {
-            jokesList.clear()
-            jokesList.addAll(savedInstanceState.getParcelableArrayList("jokesList")!!)
+            jokesLisFromFragment.clear()
+            jokesListLoaded.clear()
+            jokesLisFromFragment.addAll(savedInstanceState.getParcelableArrayList("jokesListFromFragment")!!)
+            jokesListLoaded.addAll(savedInstanceState.getParcelableArrayList("jokesListLoaded")!!)
             isFirst = savedInstanceState.getBoolean("isFirst")
         }
         setUpRecycler()
-        val job1 = viewLifecycleOwner.lifecycleScope.launch {
-            loadJokes()
-        }
         val job2 = viewLifecycleOwner.lifecycleScope.launch {
-            if (isFirst) {
-                job1.join()
-            }
             jokeRepository.getData().collect {
-                jokesList.addAll(it)
-                adapter.setData(jokesList.toMutableList())
+                jokesLisFromFragment.addAll(it)
+                updateAdapterData()
                 binding.progressBar.visibility = View.INVISIBLE
+            }
+        }
+        val job1 = viewLifecycleOwner.lifecycleScope.launch {
+            job2.join()
+            if (isFirst) {
+                loadJokes()
             }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList("jokesList", ArrayList(jokesList))
+        outState.putParcelableArrayList("jokesListFromFragment", ArrayList(jokesLisFromFragment))
+        outState.putParcelableArrayList("jokesListLoaded", ArrayList(jokesListLoaded))
         outState.putBoolean("isFirst", isFirst)
     }
 
@@ -95,10 +101,9 @@ class MainFragment : Fragment(R.layout.main_fragment) {
                 val loaded = response.body()
                 if (loaded != null) {
                     for (i in loaded.jokes) {
-                        jokeRepository.addJoke(Joke(i.category, i.setup, i.delivery))
-                        jokesList.add(Joke(i.category, i.setup, i.delivery))
+                        jokesListLoaded.add(Joke(i.category, i.setup, i.delivery, fromInternet))
                     }
-
+                    updateAdapterData()
                 } else {
                     Snackbar.make(binding.root, getString(R.string.error), Snackbar.LENGTH_SHORT)
                         .show()
@@ -111,6 +116,13 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         } finally {
             binding.progressBar.visibility = View.INVISIBLE
         }
+    }
+
+    private fun updateAdapterData() {
+        val combinedList = mutableListOf<Joke>()
+        combinedList.addAll(jokesLisFromFragment)
+        combinedList.addAll(jokesListLoaded)
+        adapter.setData(combinedList)
     }
 
     private fun setUpRecycler() {
@@ -130,8 +142,6 @@ class MainFragment : Fragment(R.layout.main_fragment) {
                         viewLifecycleOwner.lifecycleScope.launch {
                             loadJokes()
                             isLoading = false
-                            adapter.setData(jokesList.toMutableList())
-                            binding.progressBar.visibility = View.INVISIBLE
                         }
                     }
                 }
