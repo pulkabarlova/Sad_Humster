@@ -10,11 +10,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sadhumster.recycler_set_up.JokesAdapter
-import com.example.sadhumster.model.JokesData
 import com.example.sadhumster.R
 import com.example.sadhumster.activities.MainActivity
 import com.example.sadhumster.databinding.MainFragmentBinding
+import com.example.sadhumster.db.AppDatabase
+import com.example.sadhumster.db.CachedJokeDao
+import com.example.sadhumster.db.JokesDao
 import com.example.sadhumster.model.Joke
+import com.example.sadhumster.model.JokeFromInternet
 import com.example.sadhumster.model.JokeRepository
 import com.example.sadhumster.network.RetrofitInstance
 import com.google.android.material.snackbar.Snackbar
@@ -28,13 +31,16 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter by lazy { JokesAdapter(this, parentFragmentManager) }
-    private val jokeRepository = JokeRepository
-    private val jokesListLoaded = mutableSetOf<Joke>()
+    private val jokesListLoaded = mutableSetOf<JokeFromInternet>()
     private val jokesLisFromFragment = mutableSetOf<Joke>()
     private var isFirst = true
     private var isLoading = false
     private val fromInternet = "fromInternet"
     private val fromFragment = "fromFragment"
+    private val repository: JokeRepository by lazy {
+        JokeRepository(AppDatabase.INSTANCE?.jokesDao() ?: error("Database not initialized"),
+            AppDatabase.INSTANCE?.cachedJokeDao() ?: error("Database not initialized"))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,12 +61,12 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             jokesLisFromFragment.clear()
             jokesListLoaded.clear()
             jokesLisFromFragment.addAll(savedInstanceState.getParcelableArrayList("jokesListFromFragment")!!)
-            jokesListLoaded.addAll(savedInstanceState.getParcelableArrayList("jokesListLoaded")!!)
+            //jokesListLoaded.addAll(savedInstanceState.getParcelableArrayList("jokesListLoaded")!!)
             isFirst = savedInstanceState.getBoolean("isFirst")
         }
         setUpRecycler()
         val job2 = viewLifecycleOwner.lifecycleScope.launch {
-            jokeRepository.getData().collect {
+            repository.getAllJokes().collect {
                 jokesLisFromFragment.addAll(it)
                 updateAdapterData()
                 binding.progressBar.visibility = View.INVISIBLE
@@ -77,7 +83,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList("jokesListFromFragment", ArrayList(jokesLisFromFragment))
-        outState.putParcelableArrayList("jokesListLoaded", ArrayList(jokesListLoaded))
+        //outState.putParcelableArrayList("jokesListLoaded", ArrayList(jokesListLoaded))
         outState.putBoolean("isFirst", isFirst)
     }
 
@@ -101,7 +107,15 @@ class MainFragment : Fragment(R.layout.main_fragment) {
                 val loaded = response.body()
                 if (loaded != null) {
                     for (i in loaded.jokes) {
-                        jokesListLoaded.add(Joke(i.category, i.setup, i.delivery, fromInternet))
+                        val newJoke = JokeFromInternet(
+                            category = i.category,
+                            setup = i.setup,
+                            delivery = i.delivery,
+                            from = fromFragment,
+                            cachedAt = System.currentTimeMillis()
+                        )
+                        jokesListLoaded.add(newJoke)
+                        repository.addJokeCached(newJoke)
                     }
                     updateAdapterData()
                 } else {
@@ -121,7 +135,15 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private fun updateAdapterData() {
         val combinedList = mutableListOf<Joke>()
         combinedList.addAll(jokesLisFromFragment)
-        combinedList.addAll(jokesListLoaded)
+        combinedList.addAll(jokesListLoaded.map { jokeFromInternet ->
+            Joke(
+                id = jokeFromInternet.id,
+                category = jokeFromInternet.category,
+                setup = jokeFromInternet.setup,
+                delivery = jokeFromInternet.delivery,
+                from = jokeFromInternet.from
+            )
+        })
         adapter.setData(combinedList)
     }
 
