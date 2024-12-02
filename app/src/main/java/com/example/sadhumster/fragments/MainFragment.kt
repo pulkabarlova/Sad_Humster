@@ -38,8 +38,8 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private val fromInternet = "fromInternet"
     private val fromFragment = "fromFragment"
     private val repository: JokeRepository by lazy {
-        JokeRepository(AppDatabase.INSTANCE?.jokesDao() ?: error("Database not initialized"),
-            AppDatabase.INSTANCE?.cachedJokeDao() ?: error("Database not initialized"))
+        val database = AppDatabase.getDatabase(requireContext())
+        JokeRepository(database.jokesDao(), database.cachedJokeDao())
     }
 
     override fun onCreateView(
@@ -60,20 +60,19 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         if (savedInstanceState != null) {
             jokesLisFromFragment.clear()
             jokesListLoaded.clear()
-            jokesLisFromFragment.addAll(savedInstanceState.getParcelableArrayList("jokesListFromFragment")!!)
+            //jokesLisFromFragment.addAll(savedInstanceState.getParcelableArrayList("jokesListFromFragment")!!)
             //jokesListLoaded.addAll(savedInstanceState.getParcelableArrayList("jokesListLoaded")!!)
             isFirst = savedInstanceState.getBoolean("isFirst")
         }
         setUpRecycler()
-        val job2 = viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repository.getAllJokes().collect {
                 jokesLisFromFragment.addAll(it)
                 updateAdapterData()
                 binding.progressBar.visibility = View.INVISIBLE
             }
         }
-        val job1 = viewLifecycleOwner.lifecycleScope.launch {
-            job2.join()
+        viewLifecycleOwner.lifecycleScope.launch {
             if (isFirst) {
                 loadJokes()
             }
@@ -82,7 +81,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList("jokesListFromFragment", ArrayList(jokesLisFromFragment))
+        //outState.putParcelableArrayList("jokesListFromFragment", ArrayList(jokesLisFromFragment))
         //outState.putParcelableArrayList("jokesListLoaded", ArrayList(jokesListLoaded))
         outState.putBoolean("isFirst", isFirst)
     }
@@ -101,6 +100,8 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private suspend fun loadJokes() {
         binding.progressBar.visibility = View.VISIBLE
         val retrofitInstance = RetrofitInstance()
+
+        //repository.clearOldCache(System.currentTimeMillis() - 30_000)
         try {
             val response = retrofitInstance.api.loadJokes()
             if (response.isSuccessful) {

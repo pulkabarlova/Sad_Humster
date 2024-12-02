@@ -23,7 +23,7 @@ interface JokesDao {
 }
 
 @Dao
-interface CachedJokeDao{
+interface CachedJokeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllJokes(jokes: List<JokeFromInternet>)
 

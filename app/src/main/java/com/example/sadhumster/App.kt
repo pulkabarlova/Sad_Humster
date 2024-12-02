@@ -6,6 +6,6 @@ import com.example.sadhumster.db.AppDatabase
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        AppDatabase.getDatabase(this)
+        AppDatabase.INSTANCE = AppDatabase.getDatabase(this)
     }
 }
