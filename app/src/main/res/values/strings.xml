@@ -10,8 +10,8 @@
     <string name="enter">Got a joke? Spill the beans!</string>
     <string name="joke_title">#%d %s %s</string>
     <string name="error">Try again</string>
-    <string name="fromInternet">(internet)</string>
-    <string name="fromFragment">(your)</string>"
+    <string name="from_internet">(internet)</string>
+    <string name="from_fragment">(your)</string>"
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

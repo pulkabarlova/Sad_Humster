@@ -9,13 +9,14 @@ import com.example.sadhumster.R
 import com.example.sadhumster.databinding.FragmentJokesDetailsBinding
 import com.example.sadhumster.model.Joke
 
+const val key1 = "jokeIndex"
+const val key2 = "jokesList"
 
 class FragmentJokesDetails : Fragment(R.layout.fragment_jokes_details) {
 
     private var _binding: FragmentJokesDetailsBinding? = null
     private val binding get() = _binding!!
-    private val key1 = "jokeIndex"
-    private val key2 = "jokesList"
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -26,6 +26,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
+const val fromInternet = "fromInternet"
+const val fromFragment = "fromFragment"
+
 class MainFragment : Fragment(R.layout.main_fragment) {
 
     private var _binding: MainFragmentBinding? = null
@@ -35,8 +38,6 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private val jokesLisFromFragment = mutableSetOf<Joke>()
     private var isFirst = true
     private var isLoading = false
-    private val fromInternet = "fromInternet"
-    private val fromFragment = "fromFragment"
     private val repository: JokeRepository by lazy {
         val database = AppDatabase.getDatabase(requireContext())
         JokeRepository(database.jokesDao(), database.cachedJokeDao())
@@ -73,6 +74,13 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
+            repository.getAllJokesCached().collect {
+                jokesListLoaded.addAll(it)
+                updateAdapterData()
+                binding.progressBar.visibility = View.INVISIBLE
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
             if (isFirst) {
                 loadJokes()
             }
@@ -100,23 +108,16 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private suspend fun loadJokes() {
         binding.progressBar.visibility = View.VISIBLE
         val retrofitInstance = RetrofitInstance()
-
-        //repository.clearOldCache(System.currentTimeMillis() - 30_000)
+        repository.clearOldCache(System.currentTimeMillis() - 300_000)
         try {
             val response = retrofitInstance.api.loadJokes()
             if (response.isSuccessful) {
                 val loaded = response.body()
                 if (loaded != null) {
                     for (i in loaded.jokes) {
-                        val newJoke = JokeFromInternet(
-                            category = i.category,
-                            setup = i.setup,
-                            delivery = i.delivery,
-                            from = fromFragment,
-                            cachedAt = System.currentTimeMillis()
-                        )
-                        jokesListLoaded.add(newJoke)
-                        repository.addJokeCached(newJoke)
+                        i.from = fromInternet
+                        jokesListLoaded.add(i)
+                        repository.addJokeCached(i)
                     }
                     updateAdapterData()
                 } else {

@@ -24,11 +24,13 @@ class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
 
     private var _binding: FragmentJokeAddBinding? = null
     private val binding get() = _binding!!
-    private val fromFragment = "fromFragment"
     private val repository: JokeRepository by lazy {
-        JokeRepository(AppDatabase.INSTANCE?.jokesDao() ?: error("Database not initialized"),
-            AppDatabase.INSTANCE?.cachedJokeDao() ?: error("Database not initialized"))
+        JokeRepository(
+            AppDatabase.INSTANCE?.jokesDao() ?: error("Database not initialized"),
+            AppDatabase.INSTANCE?.cachedJokeDao() ?: error("Database not initialized")
+        )
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,12 +56,9 @@ class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
             delivery = answer,
             from = fromFragment
         )
-        val job1 = viewLifecycleOwner.lifecycleScope.launch {
-            parentFragmentManager.popBackStack()
-        }
         viewLifecycleOwner.lifecycleScope.launch {
-            job1.join()
             repository.addJoke(newJoke)
+            parentFragmentManager.popBackStack()
         }
     }
 

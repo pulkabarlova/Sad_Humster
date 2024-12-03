@@ -5,12 +5,12 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 data class JokeResponse(
-    val error: Boolean,
-    val amount: Int,
-    val jokes: List<Joke>
+    val jokes: List<JokeFromInternet>
 )
+
 @Entity(tableName = "jokes")
 data class Joke(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -48,7 +48,7 @@ data class JokeFromInternet(
     val category: String,
     val setup: String,
     val delivery: String,
-    val from: String,
+    var from: String,
     @ColumnInfo(name = "jokes_from_internet") val cachedAt: Long
 )
 
