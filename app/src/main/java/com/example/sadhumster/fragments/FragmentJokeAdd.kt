@@ -14,15 +14,23 @@ import com.example.sadhumster.R
 import com.example.sadhumster.activities.MainActivity
 import com.example.sadhumster.databinding.FragmentJokeAddBinding
 import com.example.sadhumster.databinding.FragmentJokesDetailsBinding
+import com.example.sadhumster.db.AppDatabase
 import com.example.sadhumster.model.Joke
 import com.example.sadhumster.model.JokeRepository
-import com.example.sadhumster.model.JokesData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
+
     private var _binding: FragmentJokeAddBinding? = null
     private val binding get() = _binding!!
+    private val repository: JokeRepository by lazy {
+        JokeRepository(
+            AppDatabase.INSTANCE?.jokesDao() ?: error("Database not initialized"),
+            AppDatabase.INSTANCE?.cachedJokeDao() ?: error("Database not initialized")
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,16 +44,22 @@ class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
         binding.floatingActionButtonFragment.setOnClickListener {
             addJoke()
         }
-
     }
 
     private fun addJoke() {
         val question = binding.question.text.toString()
         val answer = binding.answer.text.toString()
         val category = binding.name.text.toString()
-        val listItem = Joke(question, answer, category)
-        viewLifecycleOwner.lifecycleScope.launch { JokeRepository.addJoke(listItem) }
-        parentFragmentManager.popBackStack()
+        val newJoke = Joke(
+            category = category,
+            setup = question,
+            delivery = answer,
+            from = fromFragment
+        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            repository.addJoke(newJoke)
+            parentFragmentManager.popBackStack()
+        }
     }
 
     override fun onDestroyView() {

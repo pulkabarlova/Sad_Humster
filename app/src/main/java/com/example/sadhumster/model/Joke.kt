@@ -2,22 +2,36 @@ package com.example.sadhumster.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
+data class JokeResponse(
+    val jokes: List<JokeFromInternet>
+)
+
+@Entity(tableName = "jokes")
 data class Joke(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val category: String,
-    val question: String,
-    val answer: String
+    val setup: String,
+    val delivery: String,
+    val from: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        id = parcel.readInt(),
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: ""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
         parcel.writeString(category)
-        parcel.writeString(question)
-        parcel.writeString(answer)
+        parcel.writeString(setup)
+        parcel.writeString(delivery)
     }
 
     override fun describeContents(): Int = 0
@@ -27,3 +41,17 @@ data class Joke(
         override fun newArray(size: Int): Array<Joke?> = arrayOfNulls(size)
     }
 }
+
+@Entity(tableName = "jokes_from_internet")
+data class JokeFromInternet(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val category: String,
+    val setup: String,
+    val delivery: String,
+    var from: String,
+    @ColumnInfo(name = "jokes_from_internet") val cachedAt: Long
+)
+
+
+
+
