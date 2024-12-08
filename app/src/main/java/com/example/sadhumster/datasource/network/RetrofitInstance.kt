@@ -1,4 +1,4 @@
-package com.example.sadhumster.network
+package com.example.sadhumster.datasource.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

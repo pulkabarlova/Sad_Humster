@@ -1,13 +1,13 @@
-package com.example.sadhumster.model
+package com.example.sadhumster.domain.repository
 
-import android.view.View
-import com.example.sadhumster.db.CachedJokeDao
-import com.example.sadhumster.db.JokesDao
-import kotlinx.coroutines.delay
+import com.example.sadhumster.datasource.db.CachedJokeDao
+import com.example.sadhumster.datasource.db.JokesDao
+import com.example.sadhumster.domain.model.Joke
+import com.example.sadhumster.domain.model.JokeFromInternet
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
-class JokeRepository(private val jokesDao: JokesDao, private val cachedJokeDao: CachedJokeDao) {
+
+class JokeRepository (private val jokesDao: JokesDao, private val cachedJokeDao: CachedJokeDao) {
     suspend fun addJoke(joke: Joke) {
         jokesDao.insertJoke(joke)
     }
@@ -15,6 +15,7 @@ class JokeRepository(private val jokesDao: JokesDao, private val cachedJokeDao: 
     suspend fun addJokeCached(cachedJoke: JokeFromInternet) {
         cachedJokeDao.insertJoke(cachedJoke)
     }
+
     suspend fun getAllJokes(): Flow<List<Joke>> {
         return jokesDao.getAllJokes()
     }

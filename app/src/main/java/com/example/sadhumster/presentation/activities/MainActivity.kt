@@ -1,4 +1,4 @@
-package com.example.sadhumster.activities
+package com.example.sadhumster.presentation.activities
 
 import android.os.Bundle
 import android.util.Log
@@ -7,9 +7,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.example.sadhumster.databinding.ActivityMainBinding
-import com.example.sadhumster.fragments.FragmentJokeAdd
-import com.example.sadhumster.fragments.MainFragment
-import com.example.sadhumster.model.Joke
+import com.example.sadhumster.presentation.fragments.FragmentJokeAdd
+import com.example.sadhumster.presentation.fragments.MainFragment
+import com.example.sadhumster.domain.model.Joke
+import dagger.hilt.android.HiltAndroidApp
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,5 +34,4 @@ class MainActivity : AppCompatActivity() {
             .add(binding.container.id, fragment, "main")
             .commit()
     }
-
 }

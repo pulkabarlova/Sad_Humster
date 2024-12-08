@@ -1,35 +1,25 @@
-package com.example.sadhumster.fragments
+package com.example.sadhumster.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.launch
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.sadhumster.R
-import com.example.sadhumster.activities.MainActivity
 import com.example.sadhumster.databinding.FragmentJokeAddBinding
-import com.example.sadhumster.databinding.FragmentJokesDetailsBinding
-import com.example.sadhumster.db.AppDatabase
-import com.example.sadhumster.model.Joke
-import com.example.sadhumster.model.JokeRepository
-import kotlinx.coroutines.delay
+import com.example.sadhumster.datasource.db.AppDatabase
+import com.example.sadhumster.domain.model.Joke
+import com.example.sadhumster.domain.repository.JokeRepository
+import com.example.sadhumster.domain.vew_model.JokeAddViewModel
 import kotlinx.coroutines.launch
 
 class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
 
     private var _binding: FragmentJokeAddBinding? = null
     private val binding get() = _binding!!
-    private val repository: JokeRepository by lazy {
-        JokeRepository(
-            AppDatabase.INSTANCE?.jokesDao() ?: error("Database not initialized"),
-            AppDatabase.INSTANCE?.cachedJokeDao() ?: error("Database not initialized")
-        )
-    }
+    private val viewModel: JokeAddViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,12 +44,10 @@ class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
             category = category,
             setup = question,
             delivery = answer,
-            from = fromFragment
+            from = FROM_FRAGMENT
         )
-        viewLifecycleOwner.lifecycleScope.launch {
-            repository.addJoke(newJoke)
-            parentFragmentManager.popBackStack()
-        }
+        viewModel.addJoke(newJoke)
+        parentFragmentManager.popBackStack()
     }
 
     override fun onDestroyView() {
