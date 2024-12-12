@@ -1,6 +1,6 @@
-package com.example.sadhumster.network
+package com.example.sadhumster.datasource.network
 
-import com.example.sadhumster.model.JokeResponse
+import com.example.sadhumster.domain.model.JokeResponse
 import retrofit2.Response
 import retrofit2.http.GET
 

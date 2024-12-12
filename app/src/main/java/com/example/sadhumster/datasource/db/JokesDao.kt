@@ -1,12 +1,11 @@
-package com.example.sadhumster.db
+package com.example.sadhumster.datasource.db
 
-import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.sadhumster.model.Joke
-import com.example.sadhumster.model.JokeFromInternet
+import com.example.sadhumster.domain.model.Joke
+import com.example.sadhumster.domain.model.JokeFromInternet
 import kotlinx.coroutines.flow.Flow
 
 @Dao
