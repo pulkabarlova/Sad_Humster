@@ -10,9 +10,10 @@ import com.example.sadhumster.databinding.ActivityMainBinding
 import com.example.sadhumster.presentation.fragments.FragmentJokeAdd
 import com.example.sadhumster.presentation.fragments.MainFragment
 import com.example.sadhumster.domain.model.Joke
+import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding

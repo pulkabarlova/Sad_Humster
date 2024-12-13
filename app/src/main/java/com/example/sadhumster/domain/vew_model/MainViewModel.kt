@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sadhumster.datasource.db.AppDatabase
 import com.example.sadhumster.datasource.network.RetrofitInstance
@@ -13,19 +14,17 @@ import com.example.sadhumster.domain.model.Joke
 import com.example.sadhumster.domain.model.JokeFromInternet
 import com.example.sadhumster.domain.repository.JokeRepository
 import com.example.sadhumster.presentation.fragments.FROM_INTERNET
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class MainViewModel @Inject constructor(private val repository: JokeRepository) : ViewModel() {
     private val jokesListLoaded = mutableSetOf<JokeFromInternet>()
     private val jokesLisFromFragment = mutableSetOf<Joke>()
     private val _jokesList = MutableLiveData<List<Joke>>()
     val jokesList: LiveData<List<Joke>> get() = _jokesList
-    private val repository: JokeRepository by lazy {
-        val database = AppDatabase.getDatabase(application)
-        JokeRepository(database.jokesDao(), database.cachedJokeDao())
-    }
 
     init {
         loadInitialData()

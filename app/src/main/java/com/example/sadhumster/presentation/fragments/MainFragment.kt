@@ -15,6 +15,7 @@ import com.example.sadhumster.databinding.MainFragmentBinding
 import com.example.sadhumster.domain.model.Joke
 import com.example.sadhumster.domain.model.JokeFromInternet
 import com.example.sadhumster.domain.vew_model.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 const val FROM_INTERNET = "fromInternet"
@@ -22,7 +23,7 @@ const val FROM_FRAGMENT = "fromFragment"
 const val JOKE_INDEX_KEY = "jokeIndex"
 const val JOKE_LIST_KEY = "jokesList"
 
-
+@AndroidEntryPoint
 class MainFragment : Fragment(R.layout.main_fragment) {
 
     private var _binding: MainFragmentBinding? = null

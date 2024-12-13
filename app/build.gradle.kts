@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.sadhumster"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.sadhumster"
@@ -53,8 +53,9 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.hilt.lifecycle.viewmodel)
+    implementation(libs.androidx.hilt.navigation.fragment)
     implementation(libs.hilt.android)
+    implementation(libs.kotlinx.metadata.jvm)
     ksp(libs.hilt.android.compiler)
     ksp(libs.androidx.room.compiler)
     ksp(libs.androidx.hilt.compiler)

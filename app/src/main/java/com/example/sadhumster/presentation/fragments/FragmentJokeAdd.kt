@@ -13,8 +13,9 @@ import com.example.sadhumster.datasource.db.AppDatabase
 import com.example.sadhumster.domain.model.Joke
 import com.example.sadhumster.domain.repository.JokeRepository
 import com.example.sadhumster.domain.vew_model.JokeAddViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
 
     private var _binding: FragmentJokeAddBinding? = null
