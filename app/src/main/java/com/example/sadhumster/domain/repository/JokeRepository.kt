@@ -5,9 +5,10 @@ import com.example.sadhumster.datasource.db.JokesDao
 import com.example.sadhumster.domain.model.Joke
 import com.example.sadhumster.domain.model.JokeFromInternet
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 
-class JokeRepository (private val jokesDao: JokesDao, private val cachedJokeDao: CachedJokeDao) {
+class JokeRepository @Inject constructor(private val jokesDao: JokesDao, private val cachedJokeDao: CachedJokeDao) {
     suspend fun addJoke(joke: Joke) {
         jokesDao.insertJoke(joke)
     }
@@ -26,5 +27,13 @@ class JokeRepository (private val jokesDao: JokesDao, private val cachedJokeDao:
 
     suspend fun clearOldCache(validTime: Long) {
         return cachedJokeDao.clearOldCache(validTime)
+    }
+
+    suspend fun updateJoke(joke: Joke) {
+        jokesDao.insertJoke(joke)
+    }
+
+    suspend fun updateCachedJoke(joke: JokeFromInternet) {
+        cachedJokeDao.insertJoke(joke)
     }
 }

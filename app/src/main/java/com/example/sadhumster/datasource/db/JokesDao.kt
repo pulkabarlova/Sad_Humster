@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.sadhumster.domain.model.Joke
 import com.example.sadhumster.domain.model.JokeFromInternet
 import kotlinx.coroutines.flow.Flow
@@ -16,9 +17,9 @@ interface JokesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertJoke(joke: Joke)
 
-
     @Query("SELECT * FROM jokes")
     fun getAllJokes(): Flow<List<Joke>>
+
 }
 
 @Dao
@@ -34,4 +35,5 @@ interface CachedJokeDao {
 
     @Query("SELECT * FROM jokes_from_internet")
     fun getAllJokes(): Flow<List<JokeFromInternet>>
+
 }

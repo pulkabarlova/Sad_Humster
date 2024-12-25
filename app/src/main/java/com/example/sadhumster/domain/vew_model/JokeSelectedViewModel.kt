@@ -1,26 +1,21 @@
 package com.example.sadhumster.domain.vew_model
 
-
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sadhumster.datasource.db.AppDatabase
-import com.example.sadhumster.datasource.network.RetrofitInstance
 import com.example.sadhumster.domain.model.Joke
 import com.example.sadhumster.domain.model.JokeFromInternet
 import com.example.sadhumster.domain.repository.JokeRepository
-import com.example.sadhumster.presentation.fragments.FROM_INTERNET
 import dagger.hilt.android.lifecycle.HiltViewModel
-
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: JokeRepository) : ViewModel() {
+class JokeSelectedViewModel @Inject constructor(val repository: JokeRepository) :
+    ViewModel() {
+
     private val jokesListLoaded = mutableSetOf<JokeFromInternet>()
     private val jokesLisFromFragment = mutableSetOf<Joke>()
     private val _jokesList = MutableLiveData<List<Joke>>()
@@ -33,14 +28,22 @@ class MainViewModel @Inject constructor(private val repository: JokeRepository) 
     fun loadInitialData() {
         viewModelScope.launch {
             repository.getAllJokes().collect { jokesFromDb ->
-                jokesLisFromFragment.addAll(jokesFromDb)
-                updateCombinedData()
+                for (i in jokesFromDb) {
+                    if (i.favourite == 1) {
+                        jokesLisFromFragment.add(i)
+                        updateCombinedData()
+                    }
+                }
             }
         }
         viewModelScope.launch {
             repository.getAllJokesCached().collect { cachedJokes ->
-                jokesListLoaded.addAll(cachedJokes)
-                updateCombinedData()
+                for (i in cachedJokes) {
+                    if (i.favourite == 1) {
+                        jokesListLoaded.add(i)
+                        updateCombinedData()
+                    }
+                }
             }
         }
     }
@@ -60,28 +63,4 @@ class MainViewModel @Inject constructor(private val repository: JokeRepository) 
         })
         _jokesList.value = combinedList
     }
-
-    fun loadJokesFromApi() {
-        viewModelScope.launch {
-            try {
-                val retrofitInstance = RetrofitInstance()
-                repository.clearOldCache(System.currentTimeMillis() - 300_000)
-                val response = retrofitInstance.api.loadJokes()
-                if (response.isSuccessful) {
-                    val loaded = response.body()
-                    if (loaded != null) {
-                        for (i in loaded.jokes) {
-                            i.from = FROM_INTERNET
-                            jokesListLoaded.add(i)
-                            repository.addJokeCached(i)
-                        }
-                        updateCombinedData()
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("MainViewModel", "Error loading jokes", e)
-            }
-        }
-    }
 }
-
