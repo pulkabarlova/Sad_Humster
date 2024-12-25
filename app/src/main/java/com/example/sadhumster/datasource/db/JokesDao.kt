@@ -17,12 +17,9 @@ interface JokesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertJoke(joke: Joke)
 
-
     @Query("SELECT * FROM jokes")
     fun getAllJokes(): Flow<List<Joke>>
 
-    @Update
-    suspend fun updateJoke(joke: Joke)
 }
 
 @Dao
@@ -39,6 +36,4 @@ interface CachedJokeDao {
     @Query("SELECT * FROM jokes_from_internet")
     fun getAllJokes(): Flow<List<JokeFromInternet>>
 
-    @Update
-    suspend fun updateCachedJoke(joke:JokeFromInternet)
 }

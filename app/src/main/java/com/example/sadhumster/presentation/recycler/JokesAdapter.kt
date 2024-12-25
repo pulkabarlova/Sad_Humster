@@ -11,9 +11,10 @@ import com.example.sadhumster.domain.model.Joke
 import com.example.sadhumster.R
 import com.example.sadhumster.databinding.JokeItemBinding
 import com.example.sadhumster.presentation.fragments.FragmentJokesDetails
+import com.example.sadhumster.presentation.fragments.MainFragment
 
 class JokesAdapter(
-    private val fragment: Fragment,
+    private val context: MainFragment,
     private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<JokesHolder>() {
 
@@ -38,7 +39,7 @@ class JokesAdapter(
     }
 
     override fun onBindViewHolder(holder: JokesHolder, position: Int) {
-        holder.bind(jokes[position], fragment)
+        holder.bind(jokes[position], context)
         holder.itemView.setOnClickListener {
             val fragment = FragmentJokesDetails()
             fragmentManager.setFragmentResult(

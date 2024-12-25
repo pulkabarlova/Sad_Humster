@@ -12,12 +12,14 @@ import com.example.sadhumster.R
 import com.example.sadhumster.databinding.JokeItemBinding
 import com.example.sadhumster.domain.model.Joke
 import com.example.sadhumster.domain.repository.JokeRepository
+import com.example.sadhumster.presentation.fragments.FragmentJokeSelected
 import com.example.sadhumster.presentation.fragments.FragmentJokesDetails
+
 import com.example.sadhumster.presentation.recycler.JokesDiffUtil
 import com.example.sadhumster.presentation.recycler.JokesHolder
 
 class SelectedAdapter(
-    private val fragment: Fragment,
+    private val context: FragmentJokeSelected,
     private val fragmentManager: FragmentManager,
     private val jokeRepository: JokeRepository
 ) : RecyclerView.Adapter<SelectedHolder>() {
@@ -43,7 +45,7 @@ class SelectedAdapter(
     }
 
     override fun onBindViewHolder(holder: SelectedHolder, position: Int) {
-        holder.bind(jokes[position], fragment)
+        holder.bind(jokes[position], context)
         holder.itemView.setOnClickListener {
             val fragment = FragmentJokesDetails()
             fragmentManager.setFragmentResult(
