@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
+import com.example.sadhumster.R
 import com.example.sadhumster.databinding.ActivityMainBinding
 import com.example.sadhumster.presentation.fragments.FragmentJokeAdd
 import com.example.sadhumster.presentation.fragments.MainFragment
 import com.example.sadhumster.domain.model.Joke
+import com.example.sadhumster.presentation.fragments.FragmentJokeSelected
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
@@ -22,17 +24,35 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (savedInstanceState == null) {
-            openFragment()
+        openMainFragment()
+        binding.navigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> openMainFragment()
+                R.id.favourite -> openJokeSelectedFragment()
+                else -> {
+                    openMainFragment()
+                }
+            }
         }
     }
 
-    private fun openFragment() {
+    private fun openMainFragment(): Boolean {
         val fragment = MainFragment()
         supportFragmentManager
             .beginTransaction()
             .addToBackStack(null)
-            .add(binding.container.id, fragment, "main")
+            .replace(binding.container.id, fragment, "main")
             .commit()
+        return true
+    }
+
+    private fun openJokeSelectedFragment(): Boolean {
+        val fragment = FragmentJokeSelected()
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(null)
+            .replace(binding.container.id, fragment, "selected")
+            .commit()
+        return true
     }
 }

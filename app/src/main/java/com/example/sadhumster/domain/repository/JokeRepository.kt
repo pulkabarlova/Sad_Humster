@@ -28,4 +28,12 @@ class JokeRepository @Inject constructor(private val jokesDao: JokesDao, private
     suspend fun clearOldCache(validTime: Long) {
         return cachedJokeDao.clearOldCache(validTime)
     }
+
+    suspend fun updateJoke(joke: Joke) {
+        jokesDao.insertJoke(joke)
+    }
+
+    suspend fun updateCachedJoke(joke: JokeFromInternet) {
+        cachedJokeDao.insertJoke(joke)
+    }
 }

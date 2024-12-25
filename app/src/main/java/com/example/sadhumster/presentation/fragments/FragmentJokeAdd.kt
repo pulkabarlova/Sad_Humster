@@ -45,7 +45,8 @@ class FragmentJokeAdd : Fragment(R.layout.fragment_joke_add) {
             category = category,
             setup = question,
             delivery = answer,
-            from = FROM_FRAGMENT
+            from = FROM_FRAGMENT,
+            favourite = 0
         )
         viewModel.addJoke(newJoke)
         parentFragmentManager.popBackStack()

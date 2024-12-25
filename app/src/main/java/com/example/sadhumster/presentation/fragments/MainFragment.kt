@@ -28,7 +28,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
-    private val adapter by lazy { JokesAdapter(this, parentFragmentManager) }
+    private lateinit var adapter: JokesAdapter
     private val jokesListLoaded = mutableSetOf<JokeFromInternet>()
     private val jokesLisFromFragment = mutableSetOf<Joke>()
     private var isFirst = true
@@ -41,12 +41,14 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter = JokesAdapter(this, parentFragmentManager)
         binding.progressBar.visibility = View.INVISIBLE
         binding.floatingActionButtonFragment1.setOnClickListener {
             onAddClick()

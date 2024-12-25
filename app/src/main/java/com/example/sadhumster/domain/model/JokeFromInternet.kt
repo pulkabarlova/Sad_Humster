@@ -11,5 +11,6 @@ data class JokeFromInternet(
     val setup: String,
     val delivery: String,
     var from: String,
+    var favourite: Int=0,
     @ColumnInfo(name = "jokes_from_internet") val cachedAt: Long
 )
